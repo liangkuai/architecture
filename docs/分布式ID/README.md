@@ -35,7 +35,7 @@ CREATE DATABASE `GID`;
 
 CREATE TABLE GID.SEQ_ID (
 	id bigint(20) unsigned NOT NULL auto_increment, 
-	stub char(10) NOT NULL default '',
+	stub varchar(10) NOT NULL default '',
 	PRIMARY KEY (id),
 	UNIQUE KEY stub (stub)
 );
@@ -47,13 +47,13 @@ CREATE TABLE GID.SEQ_ID (
 - ID 单调自增，可以实现一些对 ID 有特殊要求的业务。
 
 #### 缺点
-- 可靠性低，强依赖数据库，如果数据库实例下线，那么将影响所有的业务系统（虽然主从复制模式可以提高可用性，但是主备切换可能会产生数据不一致的情况，就可能出现重复 ID）；
+- 可用性低，强依赖数据库，如果数据库实例下线，那么将影响所有的业务系统（虽然主从复制模式可以提高可用性，但是主备切换可能会产生数据不一致的情况，就可能出现重复 ID）；
 - 性能瓶颈，受限于单个实例的读写性能。
 
 
 ---
 ### 3. 数据库多主模式
-如果使用多主模式，也就是多个 MySQL 实例都可以生成自增 ID，就能提高效率和可靠性。不过需要进行一些配置，不然会产生相同的 ID。
+如果使用多主模式，也就是多个 MySQL 实例都可以生成自增 ID，就能提高效率和可用性。不过需要进行一些配置，不然会产生相同的 ID。
 
 配置每个实例的
 - 自增 ID 起始值：`auto_increment_offset`
@@ -73,13 +73,45 @@ set @@auto_increment_increment = 2;
 
 这种分布式 ID 生成方式需要单独写一个小服务，比如：`DistributIdService`，提供一个接口给业务应用获取分布式 ID。业务应用通过 RPC 调用 `DistributIdService` 服务，由 `DistributIdService` 随机从多个实例中获取 ID。
 
-虽然多实例能够提高性能和可靠性，但是这种方式扩展性不太好，增加实例需要修改原有实例的自增步长，控制新实例的起始步长，控制不好就会出现重复 ID。
+虽然多实例能够提高性能和可用性，但是这种方式扩展性不太好，增加实例需要修改原有实例的自增步长，控制新实例的起始步长，控制不好就会出现重复 ID。
 
 
 ---
 ### 4. 号段模式
+上述使用数据库生成分布式 ID 的方式中，业务系统每次需要一个 ID 都要请求一次数据库，对数据库压力大。
 
+号段模式可以理解为，分布式 ID 服务 `DistributIdService` 每次获取一批连续的 ID，缓存在本地，用完之后再去数据库取新的一批，既提高业务应用获取 ID 的效率，也大大减轻了数据库的压力。
 
+数据库设计为，
+```sql
+CREATE DATABASE `GID`;
+
+CREATE TABLE GID.SEQ_ID (
+	biz_tag varchar(128) NOT NULL,
+    max_id bigint(20) unsigned NOT NULL default 1,
+    step int(11) unsigned  NOT NULL,
+	desc varchar(256) default NULL,
+	PRIMARY KEY (biz_tag)
+);
+```
+- `biz_tag` ：用来区分业务
+- `max_id` ：表示该 `biz_tag` 目前被分配的 ID 号段的最大值
+- `step` ：每次分配的号段长度
+
+原来每次获取 ID 都需要写数据库，现在只需要把 step 设置的足够大，比如 1000，那么只有当这 1000 个 ID 用完之后才回去重新读写一次数据库，读写频率从 1 降到了 1/step。
+
+> 更新并获取号段可以用如下 SQL：
+> ```sql
+> Begin
+> UPDATE table SET max_id=max_id+step WHERE biz_tag=xxx
+> SELECT biz_tag, max_id, step FROM table WHERE biz_tag=xxx
+> Commit
+> ```
+
+为了提高可用性还可以对数据库使用多主模式部署。
+
+#### 应用
+- [tinyid - didi - GitHub](https://github.com/didi/tinyid)
 
 
 ---
@@ -108,7 +140,7 @@ Snowflake 生成的分布式 ID 是一个 long 型数字，占 8 个字节（64 
 - 强依赖机器时钟，如果机器上时钟回拨，会导致发号重复或者服务处于不可用状态。
 
 #### 应用
-- MongoDB ObjectID，生成方式类似于 Snowflake 算法。
+- MongoDB ObjectId，生成方式类似于 Snowflake 算法。
 
 #### 框架
 - [Leaf - Meituan - GitHub](https://github.com/Meituan-Dianping/Leaf)
