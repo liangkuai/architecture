@@ -156,3 +156,4 @@ Snowflake 生成的分布式 ID 是一个 long 型数字，占 8 个字节（64 
 ### 参考
 - [分布式ID生成方案总结 - Snailclimb - GitHub](https://github.com/Snailclimb/JavaGuide/blob/master/docs/system-design/micro-service/%E5%88%86%E5%B8%83%E5%BC%8Fid%E7%94%9F%E6%88%90%E6%96%B9%E6%A1%88%E6%80%BB%E7%BB%93.md) / [分布式ID生成方案总结 - Snailclimb - Gitee](https://gitee.com/SnailClimb/JavaGuide/blob/master/docs/system-design/micro-service/%E5%88%86%E5%B8%83%E5%BC%8Fid%E7%94%9F%E6%88%90%E6%96%B9%E6%A1%88%E6%80%BB%E7%BB%93.md)
 - [Leaf——美团点评分布式ID生成系统 - 美团技术团队](https://tech.meituan.com/2017/04/21/mt-leaf.html)
+- [Leaf：美团分布式ID生成服务开源 - 美团技术团队](https://tech.meituan.com/2019/03/07/open-source-project-leaf.html)
