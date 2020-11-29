@@ -28,6 +28,10 @@
 - [x] [BASE 理论](/docs/分布式理论/BASE.md)
 
 
+### 分布式协议和算法
+- [ ] [一致性哈希算法](/docs/分布式协议和算法/一致性哈希算法.md)
+
+
 ### 分布式事务
 - [x] [2PC](/docs/分布式事务/2PC.md)
 - [ ] 3PC
@@ -41,6 +45,7 @@
 - [intro](/docs/RPC/RPC.md)
 - Dubbo
     - [intro](/docs/RPC/Dubbo/Dubbo.md)
+    - [Dubbo 的负载均衡策略](/docs/RPC/Dubbo/Dubbo负载均衡.md)
 
 
 ### 分布式 ID
