@@ -53,13 +53,6 @@
     - Snowflake 算法
 
 
-## RPC
-- [intro](/docs/RPC/RPC.md)
-- Dubbo
-    - [intro](/docs/RPC/Dubbo/Dubbo.md)
-    - [x] [Dubbo 的负载均衡策略](/docs/RPC/Dubbo/Dubbo负载均衡.md)
-
-
 ## Elasticsearch
 
 - [ ] [倒排索引](/docs/Elasticsearch/倒排索引.md)
