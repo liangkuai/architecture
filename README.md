@@ -1,6 +1,6 @@
 # Architecture
 
-### 服务
+## 服务
 - [ ] [架构演变](/docs/服务/架构演变.md)
 - [x] [三高](/docs/服务/服务的“三高”标准.md)
 - [ ] 数据库篇
@@ -41,13 +41,6 @@
 - [ ] Saga 事务模型
 
 
-### RPC
-- [intro](/docs/RPC/RPC.md)
-- Dubbo
-    - [intro](/docs/RPC/Dubbo/Dubbo.md)
-    - [Dubbo 的负载均衡策略](/docs/RPC/Dubbo/Dubbo负载均衡.md)
-
-
 ### 分布式 ID
 - [intro](/docs/分布式ID/README.md)
 - 递增
@@ -60,6 +53,11 @@
     - Snowflake 算法
 
 
+## RPC
+- [intro](/docs/RPC/RPC.md)
+- Dubbo
+    - [intro](/docs/RPC/Dubbo/Dubbo.md)
+    - [x] [Dubbo 的负载均衡策略](/docs/RPC/Dubbo/Dubbo负载均衡.md)
 
 
 ## Elasticsearch
