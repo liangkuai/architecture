@@ -49,9 +49,9 @@
 ### 分布式事务
 - [intro](/docs/分布式事务/README.md)
 - [x] [2PC](/docs/分布式事务/2PC.md)
-- [ ] 3PC
-- [ ] TCC
-- [ ] 本地消息表
+- [ ] [3PC](/docs/分布式事务/3PC.md)
+- [x] [TCC](/docs/分布式事务/TCC.md)
+- [ ] [本地消息表](/docs/分布式事务/本地消息表.md)
 - [ ] MQ 事务消息
 - [ ] Saga 事务模型
 
